@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงเวลา</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin-bottom: 20px;
+        }
+        .table-container {
+            width: 80%;
+            margin: 0 auto;
+            overflow-x: auto;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+        p {
+            margin: 5px 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button.secondary {
+            background-color: #6c757d;
+        }
+        button.secondary:hover {
+            background-color: #5a6268;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="time">08:15 AM</h1>
+        <p id="date">13 ธันวาคม 2024</p>
+        <label for="employee-id">กรอกรหัสพนักงาน</label>
+        <input type="text" id="employee-id" placeholder="รหัสพนักงาน">
+        <button onclick="logTime()">ลงเวลา</button>
+        <button class="secondary" onclick="goBack()">ย้อนกลับ</button>
+    </div>
+
+    <div class="table-container">
+        <h2>ตารางการลงเวลา</h2>
+        <table id="time-table">
+            <thead>
+                <tr>
+                    <th>วันที่</th>
+                    <th>เวลา</th>
+                    <th>รหัสพนักงาน</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+            const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+            const timeString = now.toLocaleTimeString('th-TH', optionsTime);
+            const dateString = now.toLocaleDateString('th-TH', optionsDate);
+
+            document.getElementById('time').textContent = timeString;
+            document.getElementById('date').textContent = dateString;
+        }
+
+        function logTime() {
+            const employeeId = document.getElementById('employee-id').value;
+            if (employeeId.trim() === '') {
+                alert('กรุณากรอกรหัสพนักงาน');
+                return;
+            }
+
+            const now = new Date();
+            const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+            const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: true };
+
+            const timeString = now.toLocaleTimeString('th-TH', optionsTime);
+            const dateString = now.toLocaleDateString('th-TH', optionsDate);
+
+            const tableBody = document.getElementById('time-table').querySelector('tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${dateString}</td>
+                <td>${timeString}</td>
+                <td>${employeeId}</td>
+            `;
+            tableBody.appendChild(newRow);
+
+            alert(`ลงเวลาเรียบร้อย!\nรหัสพนักงาน: ${employeeId}`);
+            document.getElementById('employee-id').value = '';
+        }
+
+        function goBack() {
+            alert('ย้อนกลับไปหน้าก่อนหน้า');
+        }
+
+        // อัปเดตเวลาและวันที่ทุกวินาที
+        setInterval(updateTime, 1000);
+        updateTime(); // เรียกครั้งแรกเพื่อแสดงข้อมูลทันที
+    </script>
+</body>
+</html>
